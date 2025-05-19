@@ -1,158 +1,574 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TVVALENAREDE REDE SOCIAL 2025</title>
+    <title>Cadastro de Clientes com Backup</title>
     <style>
         body {
-            margin: 0;
-            padding: 20px;
-            background: linear-gradient(rgba(0, 0, 255, 0.5), rgba(0, 0, 255, 0.5)),
-                        url('https://example.com/bandeira-brasil.jpg');
-            background-size: cover;
             font-family: Arial, sans-serif;
-        }
-
-        header {
-            text-align: center;
+            max-width: 1000px;
+            margin: 0 auto;
             padding: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            margin-bottom: 20px;
+            background-color: #f5f5f5;
         }
-
-        .main-title {
-            color: #009c3b;
-            font-size: 2.5em;
-            text-shadow: 2px 2px #002776;
-        }
-
         .container {
-            display: flex;
-            gap: 20px;
-        }
-
-        .main-content {
-            flex: 3;
-            background-color: rgba(255, 255, 255, 0.85);
+            border: 1px solid #ddd;
             padding: 20px;
-            border-radius: 10px;
-        }
-
-        .side-buttons {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .side-button {
-            padding: 15px;
-            background-color: #FFDF00;
-            border: 2px solid #009C3B;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .registration-box {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #f0f0f0;
             border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-
-        .chat-box {
-            height: 300px;
-            overflow-y: auto;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 10px;
+        input, button, select {
+            margin: 5px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
-
         button {
-            background-color: #009C3B;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
             cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button.excluir {
+            background-color: #f44336;
+        }
+        button.excluir:hover {
+            background-color: #d32f2f;
+        }
+        button.observacoes {
+            background-color: #2196F3;
+        }
+        button.observacoes:hover {
+            background-color: #0b7dda;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .botoes {
+            margin-top: 15px;
+            text-align: right;
+        }
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .form-group input {
+            flex: 1;
+            min-width: 150px;
+        }
+        .backup-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 5px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: black;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1 class="main-title">TVVALENAREDE REDE SOCIAL 2025</h1>
-    </header>
-
     <div class="container">
-        <div class="main-content">
-            <div class="registration-box">
-                <h2>Cadastro (Limite: 50 pessoas)</h2>
-                <form id="registrationForm">
-                    <input type="text" placeholder="Nome" required>
-                    <input type="email" placeholder="E-mail" required>
-                    <input type="password" placeholder="Senha" required>
-                    <input type="file" accept="image/*">
-                    <button type="submit">Cadastrar</button>
-                </form>
-            </div>
-
-            <div>
-                <button>Achar Fotos</button>
-                <button>Achar Comentários</button>
-            </div>
-
-            <h3>Chat</h3>
-            <div class="chat-box" id="chatBox"></div>
-            <input type="text" placeholder="Digite sua mensagem" id="messageInput">
-            <button onclick="sendMessage()">Enviar</button>
+        <h1>Cadastro de Clientes</h1>
+        <p>Sistema com backup automático - Todos os dados são salvos localmente</p>
+        
+        <div class="form-group">
+            <input type="text" id="nome" placeholder="Nome completo" required>
+            <input type="tel" id="telefone" placeholder="Telefone" required>
+            <input type="text" id="cpf" placeholder="CPF" required>
+            <input type="text" id="endereco" placeholder="Endereço" required>
+            <input type="number" id="pagamento" placeholder="Valor mensal" step="0.01" required>
+            <input type="date" id="data" required>
+            <button onclick="cadastrarCliente()">Cadastrar</button>
         </div>
 
-        <div class="side-buttons">
-            <button class="side-button">1 MADE CENTER</button>
-            <button class="side-button">2 J.E.C.S</button>
-            <button class="side-button">3 BAR DO OSMAR</button>
-            <button class="side-button">4 SERGUIS ALIANÇAS</button>
-            <button class="side-button">5 SERGINHOS PNEUS</button>
-            <button class="side-button">6 CASA 3 IRMÃOS</button>
-            <button class="side-button">7 CASA DO NORDESTINO</button>
-            <button class="side-button">8 FUTEBOL AO VIVO</button>
-            <button class="side-button">9 ARQUIVO TVVALENAREDE</button>
-            <button class="side-button">10 VÍDEOS REELS</button>
-            <button class="side-button">11 FACEBOOK</button>
-            <button class="side-button">12 INSTAGRAM</button>
-            <button class="side-button">13 WHATSAPP</button>
-            <button class="side-button">14 YOUTUBE</button>
+        <div class="botoes">
+            <button onclick="exportarClientes()">Exportar Dados</button>
+            <button onclick="importarClientes()">Importar Dados</button>
+            <input type="file" id="importFile" style="display: none;" accept=".json">
+            <button onclick="mostrarHistorico()">Ver Histórico</button>
+        </div>
+
+        <div class="backup-info">
+            Último backup: <span id="ultimoBackup">Nunca</span> | 
+            Total de clientes: <span id="contador">0</span>/<span id="limiteClientes">50</span>
+        </div>
+
+        <div>
+            <table id="tabelaClientes">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Telefone</th>
+                        <th>CPF</th>
+                        <th>Endereço</th>
+                        <th>Pagamento Mensal</th>
+                        <th>Data</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="corpoTabela">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal para Observações -->
+    <div id="observacoesModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fecharModal()">&times;</span>
+            <h3>Observações do Cliente</h3>
+            <p id="nomeClienteModal"></p>
+            <textarea id="observacoesText" rows="5" style="width: 100%; margin: 10px 0;"></textarea>
+            <button onclick="salvarObservacoes()">Salvar</button>
+        </div>
+    </div>
+
+    <!-- Modal para Histórico -->
+    <div id="historicoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fecharModal()">&times;</span>
+            <h3>Histórico de Backups</h3>
+            <select id="backupSelect" style="width: 100%; margin: 10px 0; padding: 8px;">
+                <option value="">Selecione um backup para restaurar</option>
+            </select>
+            <div class="botoes">
+                <button onclick="restaurarBackup()">Restaurar este backup</button>
+                <button class="excluir" onclick="excluirBackup()">Excluir backup</button>
+            </div>
         </div>
     </div>
 
     <script>
-        let users = [];
+        // Configurações
+        const MAX_CLIENTES = 50;
+        const BACKUP_PREFIX = 'clientes_backup_';
+        const BACKUP_INTERVAL = 1000; // Tempo mínimo entre backups em ms
         
-        document.getElementById('registrationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            if(users.length >= 50) {
-                alert('Limite de cadastros atingido!');
+        // Variáveis globais
+        let clientes = [];
+        let clienteEditando = null;
+        let ultimoBackupTime = 0;
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarClientes();
+            document.getElementById('limiteClientes').textContent = MAX_CLIENTES;
+            document.getElementById('importFile').addEventListener('change', handleFileImport);
+        });
+        
+        // Funções principais
+        function cadastrarCliente() {
+            if (clientes.length >= MAX_CLIENTES) {
+                alert(`Limite máximo de ${MAX_CLIENTES} clientes atingido!`);
                 return;
             }
-            // Adicionar lógica de cadastro aqui
-            users.push({
-                name: this[0].value,
-                email: this[1].value,
-                password: this[2].value
-            });
-            alert('Cadastro realizado com sucesso!');
-            this.reset();
-        });
-
-        function sendMessage() {
-            const input = document.getElementById('messageInput');
-            const chatBox = document.getElementById('chatBox');
-            chatBox.innerHTML += `<p>${input.value}</p>`;
-            input.value = '';
+            
+            const nome = document.getElementById('nome').value.trim();
+            const telefone = document.getElementById('telefone').value.trim();
+            const cpf = document.getElementById('cpf').value.trim();
+            const endereco = document.getElementById('endereco').value.trim();
+            const pagamento = parseFloat(document.getElementById('pagamento').value);
+            const data = document.getElementById('data').value;
+            
+            if (!validarCampos(nome, telefone, cpf, endereco, pagamento, data)) {
+                return;
+            }
+            
+            const cliente = {
+                nome,
+                telefone,
+                cpf,
+                endereco,
+                pagamento,
+                data,
+                observacoes: '',
+                dataCadastro: new Date().toISOString()
+            };
+            
+            clientes.push(cliente);
+            atualizarTabela();
+            atualizarContador();
+            limparCampos();
+            fazerBackup();
         }
+        
+        function validarCampos(nome, telefone, cpf, endereco, pagamento, data) {
+            if (!nome || !telefone || !cpf || !endereco || isNaN(pagamento) || !data) {
+                alert('Preencha todos os campos corretamente!');
+                return false;
+            }
+            
+            // Verifica se CPF já existe
+            if (clientes.some(c => c.cpf === cpf)) {
+                alert('Já existe um cliente cadastrado com este CPF!');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        function editarObservacoes(index) {
+            clienteEditando = index;
+            const cliente = clientes[index];
+            document.getElementById('nomeClienteModal').textContent = cliente.nome;
+            document.getElementById('observacoesText').value = cliente.observacoes || '';
+            document.getElementById('observacoesModal').style.display = 'block';
+        }
+        
+        function salvarObservacoes() {
+            if (clienteEditando !== null) {
+                const novasObservacoes = document.getElementById('observacoesText').value;
+                clientes[clienteEditando].observacoes = novasObservacoes;
+                atualizarTabela();
+                fazerBackup();
+                fecharModal();
+            }
+        }
+        
+        function deletarCliente(index) {
+            if (confirm('Tem certeza que deseja excluir este cliente?')) {
+                clientes.splice(index, 1);
+                atualizarTabela();
+                atualizarContador();
+                fazerBackup();
+            }
+        }
+        
+        // Funções de backup e armazenamento
+        function fazerBackup() {
+            const agora = Date.now();
+            
+            // Evita muitos backups em sequência
+            if (agora - ultimoBackupTime < BACKUP_INTERVAL) {
+                return;
+            }
+            
+            ultimoBackupTime = agora;
+            
+            // Salva lista atual
+            localStorage.setItem('clientes_atual', JSON.stringify(clientes));
+            
+            // Cria backup histórico
+            const backupKey = BACKUP_PREFIX + agora;
+            localStorage.setItem(backupKey, JSON.stringify(clientes));
+            
+            // Atualiza UI
+            const dataFormatada = new Date(agora).toLocaleString();
+            document.getElementById('ultimoBackup').textContent = dataFormatada;
+            
+            // Mantém apenas os últimos 10 backups para não ocupar muito espaço
+            limparBackupsAntigos();
+        }
+        
+        function limparBackupsAntigos() {
+            const backups = [];
+            
+            // Coleta todos os backups
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith(BACKUP_PREFIX)) {
+                    const timestamp = parseInt(key.replace(BACKUP_PREFIX, ''));
+                    backups.push({ key, timestamp });
+                }
+            }
+            
+            // Ordena do mais antigo para o mais novo
+            backups.sort((a, b) => a.timestamp - b.timestamp);
+            
+            // Remove os mais antigos, mantendo apenas os últimos 10
+            while (backups.length > 10) {
+                const backup = backups.shift();
+                localStorage.removeItem(backup.key);
+            }
+        }
+        
+        function carregarClientes() {
+            const salvos = localStorage.getItem('clientes_atual');
+            
+            if (salvos) {
+                try {
+                    clientes = JSON.parse(salvos);
+                    atualizarTabela();
+                    atualizarContador();
+                    
+                    // Recupera data do último backup
+                    const backups = [];
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const key = localStorage.key(i);
+                        if (key.startsWith(BACKUP_PREFIX)) {
+                            const timestamp = parseInt(key.replace(BACKUP_PREFIX, ''));
+                            backups.push(timestamp);
+                        }
+                    }
+                    
+                    if (backups.length > 0) {
+                        const ultimoBackup = Math.max(...backups);
+                        document.getElementById('ultimoBackup').textContent = new Date(ultimoBackup).toLocaleString();
+                    }
+                } catch (e) {
+                    console.error('Erro ao carregar clientes:', e);
+                    alert('Erro ao carregar clientes salvos. Os dados podem estar corrompidos.');
+                }
+            }
+        }
+        
+        // Funções de UI
+        function atualizarTabela() {
+            const corpoTabela = document.getElementById('corpoTabela');
+            corpoTabela.innerHTML = '';
+            
+            clientes.forEach((cliente, index) => {
+                const row = corpoTabela.insertRow();
+                row.innerHTML = `
+                    <td>${cliente.nome}</td>
+                    <td>${formatarTelefone(cliente.telefone)}</td>
+                    <td>${formatarCPF(cliente.cpf)}</td>
+                    <td>${cliente.endereco}</td>
+                    <td>${cliente.pagamento.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</td>
+                    <td>${formatarData(cliente.data)}</td>
+                    <td>
+                        <button class="observacoes" onclick="editarObservacoes(${index})">📝 Observações</button>
+                        <button class="excluir" onclick="deletarCliente(${index})">❌ Excluir</button>
+                    </td>
+                `;
+            });
+        }
+        
+        function atualizarContador() {
+            document.getElementById('contador').textContent = clientes.length;
+        }
+        
+        function limparCampos() {
+            document.getElementById('nome').value = '';
+            document.getElementById('telefone').value = '';
+            document.getElementById('cpf').value = '';
+            document.getElementById('endereco').value = '';
+            document.getElementById('pagamento').value = '';
+            document.getElementById('data').value = '';
+            document.getElementById('nome').focus();
+        }
+        
+        // Funções de exportação/importação
+        function exportarClientes() {
+            if (clientes.length === 0) {
+                alert('Nenhum cliente para exportar!');
+                return;
+            }
+            
+            const dataStr = JSON.stringify(clientes, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = `clientes_${new Date().toISOString().slice(0,10)}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        }
+        
+        function importarClientes() {
+            document.getElementById('importFile').click();
+        }
+        
+        function handleFileImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const novosClientes = JSON.parse(e.target.result);
+                    
+                    if (!Array.isArray(novosClientes)) {
+                        throw new Error('O arquivo não contém uma lista válida de clientes');
+                    }
+                    
+                    if (confirm(`Deseja importar ${novosClientes.length} clientes? Isso substituirá seus clientes atuais.`)) {
+                        clientes = novosClientes;
+                        atualizarTabela();
+                        atualizarContador();
+                        fazerBackup();
+                        alert('Clientes importados com sucesso!');
+                    }
+                } catch (e) {
+                    alert('Erro ao importar clientes: ' + e.message);
+                }
+                
+                // Limpa o input para permitir a importação do mesmo arquivo novamente
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        }
+        
+        // Funções de histórico
+        function mostrarHistorico() {
+            const modal = document.getElementById('historicoModal');
+            const select = document.getElementById('backupSelect');
+            
+            // Limpa opções existentes
+            select.innerHTML = '<option value="">Selecione um backup para restaurar</option>';
+            
+            // Coleta todos os backups
+            const backups = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith(BACKUP_PREFIX)) {
+                    const timestamp = parseInt(key.replace(BACKUP_PREFIX, ''));
+                    backups.push({ key, timestamp });
+                }
+            }
+            
+            // Ordena do mais novo para o mais antigo
+            backups.sort((a, b) => b.timestamp - a.timestamp);
+            
+            // Adiciona opções
+            backups.forEach(backup => {
+                const option = document.createElement('option');
+                option.value = backup.key;
+                option.textContent = new Date(backup.timestamp).toLocaleString();
+                select.appendChild(option);
+            });
+            
+            modal.style.display = 'block';
+        }
+        
+        function restaurarBackup() {
+            const select = document.getElementById('backupSelect');
+            const backupKey = select.value;
+            
+            if (!backupKey) {
+                alert('Selecione um backup para restaurar');
+                return;
+            }
+            
+            if (confirm('Deseja restaurar este backup? Isso substituirá seus clientes atuais.')) {
+                try {
+                    const backupData = localStorage.getItem(backupKey);
+                    clientes = JSON.parse(backupData);
+                    localStorage.setItem('clientes_atual', backupData);
+                    
+                    atualizarTabela();
+                    atualizarContador();
+                    document.getElementById('ultimoBackup').textContent = new Date(parseInt(backupKey.replace(BACKUP_PREFIX, ''))).toLocaleString();
+                    alert('Backup restaurado com sucesso!');
+                    fecharModal();
+                } catch (e) {
+                    alert('Erro ao restaurar backup: ' + e.message);
+                }
+            }
+        }
+        
+        function excluirBackup() {
+            const select = document.getElementById('backupSelect');
+            const backupKey = select.value;
+            
+            if (!backupKey) {
+                alert('Selecione um backup para excluir');
+                return;
+            }
+            
+            if (confirm('Tem certeza que deseja excluir este backup permanentemente?')) {
+                localStorage.removeItem(backupKey);
+                select.remove(select.selectedIndex);
+                alert('Backup excluído com sucesso!');
+            }
+        }
+        
+        // Funções auxiliares
+        function formatarTelefone(telefone) {
+            // Formatação simples de telefone (11) 99999-9999
+            const nums = telefone.replace(/\D/g, '');
+            if (nums.length === 11) {
+                return `(${nums.substring(0,2)}) ${nums.substring(2,7)}-${nums.substring(7)}`;
+            }
+            if (nums.length === 10) {
+                return `(${nums.substring(0,2)}) ${nums.substring(2,6)}-${nums.substring(6)}`;
+            }
+            return telefone;
+        }
+        
+        function formatarCPF(cpf) {
+            // Formatação de CPF 999.999.999-99
+            const nums = cpf.replace(/\D/g, '');
+            if (nums.length === 11) {
+                return `${nums.substring(0,3)}.${nums.substring(3,6)}.${nums.substring(6,9)}-${nums.substring(9)}`;
+            }
+            return cpf;
+        }
+        
+        function formatarData(data) {
+            // Formata data para dd/mm/aaaa
+            if (!data) return '';
+            try {
+                return new Date(data).toLocaleDateString('pt-BR');
+            } catch (e) {
+                return data;
+            }
+        }
+        
+        function fecharModal() {
+            document.getElementById('observacoesModal').style.display = 'none';
+            document.getElementById('historicoModal').style.display = 'none';
+            clienteEditando = null;
+        }
+        
+        // Fecha o modal ao clicar fora dele
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                fecharModal();
+            }
+        };
     </script>
 </body>
 </html>
