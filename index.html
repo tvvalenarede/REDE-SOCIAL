@@ -1,574 +1,1059 @@
 
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Clientes com Backup</title>
+    <title>TVVALENAREDE - Notícias e Entretenimento</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap">
     <style>
+        :root {
+            --primary: #232f3e;
+            --secondary: #ff9900;
+            --accent: #146eb4;
+            --dark: #131a22;
+            --light: #f2f2f2;
+            --text-dark: #333;
+            --text-light: #fff;
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --hover-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
+            font-family: 'Open Sans', sans-serif;
             background-color: #f5f5f5;
+            color: var(--text-dark);
+            line-height: 1.6;
         }
-        .container {
-            border: 1px solid #ddd;
-            padding: 20px;
-            border-radius: 8px;
-            background-color: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        input, button, select {
-            margin: 5px;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        button {
-            cursor: pointer;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        button.excluir {
-            background-color: #f44336;
-        }
-        button.excluir:hover {
-            background-color: #d32f2f;
-        }
-        button.observacoes {
-            background-color: #2196F3;
-        }
-        button.observacoes:hover {
-            background-color: #0b7dda;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-        .botoes {
-            margin-top: 15px;
-            text-align: right;
-        }
-        .form-group {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .form-group input {
-            flex: 1;
-            min-width: 150px;
-        }
-        .backup-info {
-            font-size: 12px;
-            color: #666;
-            margin-top: 10px;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
+
+        /* Header estilo moderno */
+        .main-header {
+            background: linear-gradient(to right, var(--primary), var(--dark));
+            color: var(--text-light);
+            padding: 1rem 0;
+            position: sticky;
             top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-container img {
+            height: 50px;
+            border-radius: 8px;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-text h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .logo-text span {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-icons a {
+            color: var(--text-light);
+            font-size: 1.5rem;
+            transition: transform 0.3s, color 0.3s;
+        }
+
+        .social-icons a:hover {
+            transform: translateY(-3px);
+            color: var(--secondary);
+        }
+
+        /* Navegação principal */
+        .main-nav {
+            background: var(--secondary);
+            padding: 0.8rem 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .search-box input {
+            border: none;
+            padding: 0.6rem 1rem;
+            width: 250px;
+            font-size: 1rem;
+        }
+
+        .search-box button {
+            background: var(--primary);
+            color: var(--text-light);
+            border: none;
+            padding: 0.6rem 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .search-box button:hover {
+            background: var(--accent);
+        }
+
+        /* Botões superiores */
+        .top-buttons-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: linear-gradient(to right, var(--primary), var(--dark));
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .top-button {
+            padding: 1rem 2rem;
+            background: linear-gradient(to bottom, var(--secondary), var(--accent));
+            color: var(--text-light);
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--card-shadow);
+            min-width: 220px;
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .top-button:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+            background: linear-gradient(to bottom, #ffaa33, #1a7bb9);
+        }
+
+        .top-button.perfumaria {
+            background: linear-gradient(to bottom, #FF6B9C, #D8436E);
+        }
+        
+        .top-button.perfumaria:hover {
+            background: linear-gradient(to bottom, #FF80AA, #E05C85);
+        }
+
+        .top-button.advogados {
+            background: linear-gradient(to bottom, #4A90E2, #2A5CAA);
+        }
+        
+        .top-button.advogados:hover {
+            background: linear-gradient(to bottom, #5CA0F0, #3A6CC0);
+        }
+
+        .top-button.casa-irmaos {
+            background: linear-gradient(to bottom, #34C759, #2AA44F);
+        }
+        
+        .top-button.casa-irmaos:hover {
+            background: linear-gradient(to bottom, #44D769, #3AB45F);
+        }
+
+        .top-button.shekinah {
+            background: linear-gradient(to bottom, #9b59b6, #8e44ad);
+        }
+        
+        .top-button.shekinah:hover {
+            background: linear-gradient(to bottom, #a66bbe, #9b59b6);
+        }
+
+        /* Layout principal */
+        .main-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Sidebar Esquerda */
+        .sidebar {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            height: fit-content;
+        }
+
+        .sidebar-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--secondary);
+            color: var(--primary);
+        }
+
+        .nav-button {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            background: var(--primary);
+            color: var(--text-light);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            gap: 0.8rem;
+        }
+
+        .nav-button i {
+            font-size: 1.2rem;
+        }
+
+        .nav-button:hover {
+            transform: translateX(5px);
+            box-shadow: var(--hover-shadow);
+            background: var(--accent);
+        }
+
+        .nav-button.agua-quente {
+            background: #FF0000;
+            color: #FFFF00;
+        }
+
+        .nav-button.agua-quente:hover {
+            background: #CC0000;
+            color: #FFFF00;
+        }
+
+        /* Conteúdo Principal */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Seção de Notícias */
+        .news-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--secondary);
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .news-card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: white;
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .news-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .news-content {
+            padding: 1.2rem;
+        }
+
+        .news-category {
+            display: inline-block;
+            background: var(--secondary);
+            color: var(--text-dark);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        .news-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+            color: var(--primary);
+        }
+
+        .news-excerpt {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .news-date {
+            font-size: 0.85rem;
+            color: #888;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Seção de Vídeos */
+        .videos-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .video-card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4);
+            border: none;
         }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 600px;
+
+        .video-title {
+            padding: 1rem;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+
+        /* Seção de Fotos */
+        .photos-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .photo-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 200px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .photo-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .photo-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.8rem;
+            font-size: 0.9rem;
+        }
+
+        /* Social Grid */
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .social-card {
+            background: var(--primary);
+            color: var(--text-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: var(--card-shadow);
+        }
+
+        .social-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+            background: var(--accent);
+        }
+
+        /* Formulário de Contato */
+        .contact-form {
+            background: linear-gradient(to right, var(--primary), var(--dark));
+            padding: 2rem;
+            border-radius: 10px;
+            color: var(--text-light);
+            box-shadow: var(--card-shadow);
+        }
+
+        .form-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            border: 2px solid var(--secondary);
             border-radius: 5px;
+            background: rgba(255,255,255,0.9);
+            font-family: 'Open Sans', sans-serif;
         }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
+
+        .contact-form button {
+            background: var(--secondary);
+            color: var(--text-dark);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 1rem;
         }
-        .close:hover {
-            color: black;
+
+        .contact-form button:hover {
+            background: #ffaa33;
+        }
+
+        /* Botões Fixos */
+        .fixed-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--accent);
+            color: var(--text-light);
+            padding: 1rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            box-shadow: var(--hover-shadow);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .fixed-button-left {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: var(--secondary);
+            color: var(--text-dark);
+            padding: 1rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            box-shadow: var(--hover-shadow);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .fixed-button:hover,
+        .fixed-button-left:hover {
+            transform: translateY(-5px);
+            filter: brightness(1.1);
+        }
+
+        /* Footer */
+        .main-footer {
+            background: var(--dark);
+            color: var(--text-light);
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .footer-section h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 1.2rem;
+            color: var(--secondary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #444;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* Responsividade */
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
+            .search-box input {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            .top-buttons-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .top-button {
+                width: 100%;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .news-grid,
+            .videos-grid,
+            .photos-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .fixed-button,
+            .fixed-button-left {
+                bottom: 70px;
+                font-size: 0.9rem;
+                padding: 0.8rem 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-text h1 {
+                font-size: 1.5rem;
+            }
+            
+            .logo-text span {
+                font-size: 0.9rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .nav-links a {
+                font-size: 0.9rem;
+            }
+            
+            .social-icons a {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Cadastro de Clientes</h1>
-        <p>Sistema com backup automático - Todos os dados são salvos localmente</p>
-        
-        <div class="form-group">
-            <input type="text" id="nome" placeholder="Nome completo" required>
-            <input type="tel" id="telefone" placeholder="Telefone" required>
-            <input type="text" id="cpf" placeholder="CPF" required>
-            <input type="text" id="endereco" placeholder="Endereço" required>
-            <input type="number" id="pagamento" placeholder="Valor mensal" step="0.01" required>
-            <input type="date" id="data" required>
-            <button onclick="cadastrarCliente()">Cadastrar</button>
-        </div>
-
-        <div class="botoes">
-            <button onclick="exportarClientes()">Exportar Dados</button>
-            <button onclick="importarClientes()">Importar Dados</button>
-            <input type="file" id="importFile" style="display: none;" accept=".json">
-            <button onclick="mostrarHistorico()">Ver Histórico</button>
-        </div>
-
-        <div class="backup-info">
-            Último backup: <span id="ultimoBackup">Nunca</span> | 
-            Total de clientes: <span id="contador">0</span>/<span id="limiteClientes">50</span>
-        </div>
-
-        <div>
-            <table id="tabelaClientes">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Telefone</th>
-                        <th>CPF</th>
-                        <th>Endereço</th>
-                        <th>Pagamento Mensal</th>
-                        <th>Data</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody id="corpoTabela">
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Modal para Observações -->
-    <div id="observacoesModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="fecharModal()">&times;</span>
-            <h3>Observações do Cliente</h3>
-            <p id="nomeClienteModal"></p>
-            <textarea id="observacoesText" rows="5" style="width: 100%; margin: 10px 0;"></textarea>
-            <button onclick="salvarObservacoes()">Salvar</button>
-        </div>
-    </div>
-
-    <!-- Modal para Histórico -->
-    <div id="historicoModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="fecharModal()">&times;</span>
-            <h3>Histórico de Backups</h3>
-            <select id="backupSelect" style="width: 100%; margin: 10px 0; padding: 8px;">
-                <option value="">Selecione um backup para restaurar</option>
-            </select>
-            <div class="botoes">
-                <button onclick="restaurarBackup()">Restaurar este backup</button>
-                <button class="excluir" onclick="excluirBackup()">Excluir backup</button>
+    <!-- Header principal -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo-container">
+                <img src="https://github.com/tvvalenarede/bonani3/raw/main/logocerto2025.png" alt="Logo TVVALENAREDE">
+                <div class="logo-text">
+                    <h1>TVVALENAREDE</h1>
+                    <span>Notícias e Entretenimento</span>
+                </div>
+            </div>
+            
+            <div class="social-icons">
+                <a href="https://www.facebook.com/TVRBRAZIL" target="_blank"><i class="fab fa-facebook"></i></a>
+                <a href="https://www.instagram.com/tvvalenarede" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="http://youtube.com/tvvalenarede" target="_blank"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.tiktok.com/@tvvalenarede" target="_blank"><i class="fab fa-tiktok"></i></a>
             </div>
         </div>
+    </header>
+    
+    <!-- Navegação principal -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="#"><i class="fas fa-home"></i> Início</a></li>
+                <li><a href="#"><i class="fas fa-newspaper"></i> Notícias</a></li>
+                <li><a href="#"><i class="fas fa-video"></i> Vídeos</a></li>
+                <li><a href="#"><i class="fas fa-photo-video"></i> Fotos</a></li>
+                <li><a href="#"><i class="fas fa-basketball-ball"></i> Esportes</a></li>
+                <li><a href="#"><i class="fas fa-microphone-alt"></i> Entretenimento</a></li>
+            </ul>
+            
+            <div class="search-box">
+                <input type="text" placeholder="Buscar no site...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Botões superiores -->
+    <div class="top-buttons-container">
+        <a href="https://tvvalenarede.github.io/bonani2/" class="top-button perfumaria">
+            <i class="fas fa-spa"></i> Perfumaria da Rita
+        </a>
+        <a href="https://tvvalenarede.webnode.page/" class="top-button advogados">
+            <i class="fas fa-gavel"></i> J.E.C.S Advogados
+        </a>
+        <a href="https://casa3-irmaos.webnode.page/" class="top-button casa-irmaos">
+            <i class="fas fa-home"></i> Casa 3 Irmãos
+        </a>
+        <a href="https://tvvalenarede.github.io/jogos/" class="top-button shekinah">
+            <i class="fas fa-bolt"></i> Shekinah Energéticos
+        </a>
     </div>
 
+    <div class="main-container">
+        <!-- Sidebar Esquerda -->
+        <div class="sidebar">
+            <h3 class="sidebar-title">Menu TVVALENAREDE</h3>
+            <a href="https://tvvalenarede.github.io/redesocial1/" class="nav-button agua-quente">
+                <i class="fas fa-futbol"></i> SITE DO MAICON JOGADOR
+            </a>
+            
+            <a href="https://www.facebook.com/TVRBRAZIL" class="nav-button agua-quente">
+                <i class="fas fa-tv"></i> TVVALENAREDE AO VIVO
+            </a>
+            <a href="https://tvvalenarede.github.io/jogos/" class="nav-button">
+                <i class="fas fa-bolt"></i> Shekinah Energéticos
+            </a>
+            <a href="https://casa3-irmaos.webnode.page" class="nav-button">
+                <i class="fas fa-home"></i> CASA 3 IRMÃOS
+            </a>
+            <a href="https://www.youtube.com/watch?v=z2j0Yzf8Myk&t=34s" class="nav-button">
+                <i class="fas fa-trophy"></i> PREMIAÇÃO ACEESP
+            </a>
+            <a href="https://made-center7.webnode.page" class="nav-button">
+                <i class="fas fa-futbol"></i> FUTEBOL
+            </a>
+            <a href="https://www.youtube.com/channel/UC2d71oRHuTsosOap7GeYT4g" class="nav-button">
+                <i class="fab fa-youtube"></i> YOUTUBE LIVE
+            </a>
+            <a href="https://bar-do-osmar-de-taubate-s-p.webnode.page/" class="nav-button">
+                <i class="fas fa-beer"></i> BAR DO OSMAR
+            </a>
+            <a href="https://serginhos-centro-automotivo-de-taubate.webnode.page/" class="nav-button">
+                <i class="fas fa-car"></i> SERGINHO PNEUS
+            </a>
+        </div>
+
+        <!-- Conteúdo Principal -->
+        <div class="main-content">
+            <!-- Seção de Notícias -->
+            <section class="news-section">
+                <h2 class="section-title">Últimas Notícias</h2>
+                <div class="news-grid">
+                    <article class="news-card">
+                        <img src="https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Política" class="news-image">
+                        <div class="news-content">
+                            <span class="news-category">Política</span>
+                            <h3 class="news-title">Novas medidas econômicas são anunciadas pelo governo federal</h3>
+                            <p class="news-excerpt">O ministro da economia apresentou hoje um pacote com medidas para estimular o crescimento econômico e conter a inflação no país.</p>
+                            <div class="news-date">
+                                <i class="far fa-clock"></i> Há 2 horas
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="news-card">
+                        <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Esportes" class="news-image">
+                        <div class="news-content">
+                            <span class="news-category">Esportes</span>
+                            <h3 class="news-title">Time local vence campeonato estadual após 10 anos</h3>
+                            <p class="news-excerpt">Com uma vitória por 3 a 1, o time da cidade conquistou o título estadual após uma década de espera dos torcedores.</p>
+                            <div class="news-date">
+                                <i class="far fa-clock"></i> Há 5 horas
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="news-card">
+                        <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Cultura" class="news-image">
+                        <div class="news-content">
+                            <span class="news-category">Cultura</span>
+                            <h3 class="news-title">Festival de cinema começa nesta sexta com produções nacionais</h3>
+                            <p class="news-excerpt">A 15ª edição do festival traz produções nacionais e internacionais com entrada gratuita em diversos locais da cidade.</p>
+                            <div class="news-date">
+                                <i class="far fa-clock"></i> Há 8 horas
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="news-card">
+                        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d15?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Saúde" class="news-image">
+                        <div class="news-content">
+                            <span class="news-category">Saúde</span>
+                            <h3 class="news-title">Nova unidade de saúde é inaugurada na região norte</h3>
+                            <p class="news-excerpt">O prefeito inaugurou hoje a nova UPA que vai atender mais de 50 mil pessoas na região norte da cidade.</p>
+                            <div class="news-date">
+                                <i class="far fa-clock"></i> Ontem, 18:30
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="news-card">
+                        <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Economia" class="news-image">
+                        <div class="news-content">
+                            <span class="news-category">Economia</span>
+                            <h3 class="news-title">Setor de tecnologia cresce 12% no último trimestre</h3>
+                            <p class="news-excerpt">Dados divulgados hoje mostram que o setor de tecnologia foi o que mais cresceu no país no último trimestre.</p>
+                            <div class="news-date">
+                                <i class="far fa-clock"></i> Ontem, 14:15
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+            
+            <!-- Seção de Vídeos -->
+            <section class="videos-section">
+                <h2 class="section-title">Vídeos em Destaque</h2>
+                <div class="videos-grid">
+                    <div class="video-card">
+                        <div class="video-wrapper">
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/z2j0Yzf8Myk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-title">PREMIAÇÃO ACEESP - Melhores momentos</div>
+                    </div>
+                    
+                    <div class="video-card">
+                        <div class="video-wrapper">
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/6q5Mp-KfMrM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-title">Entrevista exclusiva com o prefeito</div>
+                    </div>
+                    
+                    <div class="video-card">
+                        <div class="video-wrapper">
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID_3" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-title">Documentário sobre cultura local</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Seção de Fotos -->
+            <section class="photos-section">
+                <h2 class="section-title">Fotos do Dia</h2>
+                <div class="photos-grid">
+                    <div class="photo-item">
+                        <img src="https://images.unsplash.com/photo-1558901357-ca41e027e43a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Evento cultural">
+                        <div class="photo-caption">Evento cultural na praça central atrai milhares de pessoas</div>
+                    </div>
+                    
+                    <div class="photo-item">
+                        <img src="https://images.unsplash.com/photo-1584982751601-97dcc096659c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Inauguração">
+                        <div class="photo-caption">Inauguração da nova unidade de saúde no bairro Jardim das Flores</div>
+                    </div>
+                    
+                    <div class="photo-item">
+                        <img src="https://images.unsplash.com/photo-1589652717521-10c0d092dea9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Protesto">
+                        <div class="photo-caption">Protesto pacífico reúne manifestantes no centro da cidade</div>
+                    </div>
+                    
+                    <div class="photo-item">
+                        <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Ponte">
+                        <div class="photo-caption">Nova ponte facilita acesso entre os bairros</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Social Grid -->
+            <div class="social-grid">
+                <a href="https://made-center7.webnode.page" class="social-card">FUTEBOL</a>
+                <a href="https://www.youtube.com/channel/UC2d71oRHuTsosOap7GeYT4g" class="social-card">TVVALENAREDE YOUTUBE LIVE</a>
+                <a href="https://bar-do-osmar-de-taubate-s-p.webnode.page/" class="social-card">BAR DO OSMAR</a>
+                <a href="https://casa3-irmaos.webnode.page/" class="social-card">CASA 3 IRMÃOS</a>
+                <a href="https://tvvalenarede.webnode.page/" class="social-card">ADVOGADOS J.E.C.S</a>
+                <a href="https://serginhos-centro-automotivo-de-taubate.webnode.page/" class="social-card">SERGINHO PNEUS</a>
+            </div>
+
+            <!-- Formulário de Contato -->
+            <form class="contact-form" id="meuFormulario" action="https://formsubmit.co/tvrbrazil@gmail.com" method="POST">
+                <h3 class="form-title">Entre em Contato</h3>
+                <input type="text" id="nome" name="Nome" placeholder="Nome" required>
+                <input type="email" id="email" name="E-mail" placeholder="E-mail" required>
+                <textarea id="mensagem" name="Mensagem" rows="5" placeholder="Mensagem" required></textarea>
+                <input type="hidden" name="_subject" value="Nova mensagem do site">
+                <button type="submit">ENVIAR MENSAGEM</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Navegação</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-home"></i> Início</a></li>
+                    <li><a href="#"><i class="fas fa-newspaper"></i> Notícias</a></li>
+                    <li><a href="#"><i class="fas fa-video"></i> Vídeos</a></li>
+                    <li><a href="#"><i class="fas fa-photo-video"></i> Fotos</a></li>
+                    <li><a href="#"><i class="fas fa-basketball-ball"></i> Esportes</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Parceiros</h3>
+                <ul class="footer-links">
+                    <li><a href="https://tvvalenarede.github.io/bonani2/"><i class="fas fa-spa"></i> Perfumaria da Rita</a></li>
+                    <li><a href="https://tvvalenarede.webnode.page/"><i class="fas fa-gavel"></i> J.E.C.S Advogados</a></li>
+                    <li><a href="https://casa3-irmaos.webnode.page/"><i class="fas fa-home"></i> Casa 3 Irmãos</a></li>
+                    <li><a href="https://tvvalenarede.github.io/jogos/"><i class="fas fa-bolt"></i> Shekinah Energéticos</a></li>
+                    <li><a href="https://bar-do-osmar-de-taubate-s-p.webnode.page/"><i class="fas fa-beer"></i> Bar do Osmar</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Redes Sociais</h3>
+                <ul class="footer-links">
+                    <li><a href="https://www.facebook.com/TVRBRAZIL"><i class="fab fa-facebook"></i> Facebook</a></li>
+                    <li><a href="https://www.instagram.com/tvvalenarede"><i class="fab fa-instagram"></i> Instagram</a></li>
+                    <li><a href="http://youtube.com/tvvalenarede"><i class="fab fa-youtube"></i> YouTube</a></li>
+                    <li><a href="https://www.tiktok.com/@tvvalenarede"><i class="fab fa-tiktok"></i> TikTok</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-envelope"></i> tvbonani@gmail.com</a></li>
+                    <li><a href="#"><i class="fas fa-phone"></i> (12) 99769-0407</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> Taubaté, SP</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 TVVALENAREDE.COM.BR - Todos os direitos reservados</p>
+        </div>
+    </footer>
+
+    <!-- Botões Fixos -->
+    <a href="https://www.youtube.com/watch?v=ll-BtWdFNUc&t=66s" class="fixed-button">
+        <i class="fas fa-tv"></i> PROGRAMA SHEKINAH
+    </a>
+    <a href="https://tvvalenarede.webnode.page/" class="fixed-button-left">
+        <i class="fas fa-gavel"></i> J.E.C.S
+    </a>
+
     <script>
-        // Configurações
-        const MAX_CLIENTES = 50;
-        const BACKUP_PREFIX = 'clientes_backup_';
-        const BACKUP_INTERVAL = 1000; // Tempo mínimo entre backups em ms
-        
-        // Variáveis globais
-        let clientes = [];
-        let clienteEditando = null;
-        let ultimoBackupTime = 0;
-        
-        // Inicialização
         document.addEventListener('DOMContentLoaded', () => {
-            carregarClientes();
-            document.getElementById('limiteClientes').textContent = MAX_CLIENTES;
-            document.getElementById('importFile').addEventListener('change', handleFileImport);
+            const formulario = document.getElementById('meuFormulario');
+
+            formulario.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                // Validação do e-mail
+                const email = formulario.email.value;
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    alert('Por favor, insira um e-mail válido!');
+                    return;
+                }
+
+                // Validação da mensagem
+                if (formulario.mensagem.value.trim().length < 10) {
+                    alert('A mensagem deve ter pelo menos 10 caracteres!');
+                    return;
+                }
+
+                // Confirmação de envio
+                if (confirm('Deseja realmente enviar a mensagem?')) {
+                    formulario.submit();
+                    alert('Mensagem enviada com sucesso!');
+                    formulario.reset();
+                }
+            });
+            
+            // Simulação de atualização de notícias
+            console.log("Site TVVALENAREDE carregado com sucesso!");
+            
+            // Atualizar a data das notícias (simulação)
+            const newsDates = document.querySelectorAll('.news-date');
+            const now = new Date();
+            newsDates.forEach((dateElem, index) => {
+                if (index === 0) {
+                    dateElem.innerHTML = '<i class="far fa-clock"></i> Há ' + (Math.floor(Math.random() * 4) + 1) + ' horas';
+                }
+            });
         });
-        
-        // Funções principais
-        function cadastrarCliente() {
-            if (clientes.length >= MAX_CLIENTES) {
-                alert(`Limite máximo de ${MAX_CLIENTES} clientes atingido!`);
-                return;
-            }
-            
-            const nome = document.getElementById('nome').value.trim();
-            const telefone = document.getElementById('telefone').value.trim();
-            const cpf = document.getElementById('cpf').value.trim();
-            const endereco = document.getElementById('endereco').value.trim();
-            const pagamento = parseFloat(document.getElementById('pagamento').value);
-            const data = document.getElementById('data').value;
-            
-            if (!validarCampos(nome, telefone, cpf, endereco, pagamento, data)) {
-                return;
-            }
-            
-            const cliente = {
-                nome,
-                telefone,
-                cpf,
-                endereco,
-                pagamento,
-                data,
-                observacoes: '',
-                dataCadastro: new Date().toISOString()
-            };
-            
-            clientes.push(cliente);
-            atualizarTabela();
-            atualizarContador();
-            limparCampos();
-            fazerBackup();
-        }
-        
-        function validarCampos(nome, telefone, cpf, endereco, pagamento, data) {
-            if (!nome || !telefone || !cpf || !endereco || isNaN(pagamento) || !data) {
-                alert('Preencha todos os campos corretamente!');
-                return false;
-            }
-            
-            // Verifica se CPF já existe
-            if (clientes.some(c => c.cpf === cpf)) {
-                alert('Já existe um cliente cadastrado com este CPF!');
-                return false;
-            }
-            
-            return true;
-        }
-        
-        function editarObservacoes(index) {
-            clienteEditando = index;
-            const cliente = clientes[index];
-            document.getElementById('nomeClienteModal').textContent = cliente.nome;
-            document.getElementById('observacoesText').value = cliente.observacoes || '';
-            document.getElementById('observacoesModal').style.display = 'block';
-        }
-        
-        function salvarObservacoes() {
-            if (clienteEditando !== null) {
-                const novasObservacoes = document.getElementById('observacoesText').value;
-                clientes[clienteEditando].observacoes = novasObservacoes;
-                atualizarTabela();
-                fazerBackup();
-                fecharModal();
-            }
-        }
-        
-        function deletarCliente(index) {
-            if (confirm('Tem certeza que deseja excluir este cliente?')) {
-                clientes.splice(index, 1);
-                atualizarTabela();
-                atualizarContador();
-                fazerBackup();
-            }
-        }
-        
-        // Funções de backup e armazenamento
-        function fazerBackup() {
-            const agora = Date.now();
-            
-            // Evita muitos backups em sequência
-            if (agora - ultimoBackupTime < BACKUP_INTERVAL) {
-                return;
-            }
-            
-            ultimoBackupTime = agora;
-            
-            // Salva lista atual
-            localStorage.setItem('clientes_atual', JSON.stringify(clientes));
-            
-            // Cria backup histórico
-            const backupKey = BACKUP_PREFIX + agora;
-            localStorage.setItem(backupKey, JSON.stringify(clientes));
-            
-            // Atualiza UI
-            const dataFormatada = new Date(agora).toLocaleString();
-            document.getElementById('ultimoBackup').textContent = dataFormatada;
-            
-            // Mantém apenas os últimos 10 backups para não ocupar muito espaço
-            limparBackupsAntigos();
-        }
-        
-        function limparBackupsAntigos() {
-            const backups = [];
-            
-            // Coleta todos os backups
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith(BACKUP_PREFIX)) {
-                    const timestamp = parseInt(key.replace(BACKUP_PREFIX, ''));
-                    backups.push({ key, timestamp });
-                }
-            }
-            
-            // Ordena do mais antigo para o mais novo
-            backups.sort((a, b) => a.timestamp - b.timestamp);
-            
-            // Remove os mais antigos, mantendo apenas os últimos 10
-            while (backups.length > 10) {
-                const backup = backups.shift();
-                localStorage.removeItem(backup.key);
-            }
-        }
-        
-        function carregarClientes() {
-            const salvos = localStorage.getItem('clientes_atual');
-            
-            if (salvos) {
-                try {
-                    clientes = JSON.parse(salvos);
-                    atualizarTabela();
-                    atualizarContador();
-                    
-                    // Recupera data do último backup
-                    const backups = [];
-                    for (let i = 0; i < localStorage.length; i++) {
-                        const key = localStorage.key(i);
-                        if (key.startsWith(BACKUP_PREFIX)) {
-                            const timestamp = parseInt(key.replace(BACKUP_PREFIX, ''));
-                            backups.push(timestamp);
-                        }
-                    }
-                    
-                    if (backups.length > 0) {
-                        const ultimoBackup = Math.max(...backups);
-                        document.getElementById('ultimoBackup').textContent = new Date(ultimoBackup).toLocaleString();
-                    }
-                } catch (e) {
-                    console.error('Erro ao carregar clientes:', e);
-                    alert('Erro ao carregar clientes salvos. Os dados podem estar corrompidos.');
-                }
-            }
-        }
-        
-        // Funções de UI
-        function atualizarTabela() {
-            const corpoTabela = document.getElementById('corpoTabela');
-            corpoTabela.innerHTML = '';
-            
-            clientes.forEach((cliente, index) => {
-                const row = corpoTabela.insertRow();
-                row.innerHTML = `
-                    <td>${cliente.nome}</td>
-                    <td>${formatarTelefone(cliente.telefone)}</td>
-                    <td>${formatarCPF(cliente.cpf)}</td>
-                    <td>${cliente.endereco}</td>
-                    <td>${cliente.pagamento.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</td>
-                    <td>${formatarData(cliente.data)}</td>
-                    <td>
-                        <button class="observacoes" onclick="editarObservacoes(${index})">📝 Observações</button>
-                        <button class="excluir" onclick="deletarCliente(${index})">❌ Excluir</button>
-                    </td>
-                `;
-            });
-        }
-        
-        function atualizarContador() {
-            document.getElementById('contador').textContent = clientes.length;
-        }
-        
-        function limparCampos() {
-            document.getElementById('nome').value = '';
-            document.getElementById('telefone').value = '';
-            document.getElementById('cpf').value = '';
-            document.getElementById('endereco').value = '';
-            document.getElementById('pagamento').value = '';
-            document.getElementById('data').value = '';
-            document.getElementById('nome').focus();
-        }
-        
-        // Funções de exportação/importação
-        function exportarClientes() {
-            if (clientes.length === 0) {
-                alert('Nenhum cliente para exportar!');
-                return;
-            }
-            
-            const dataStr = JSON.stringify(clientes, null, 2);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            
-            const exportFileDefaultName = `clientes_${new Date().toISOString().slice(0,10)}.json`;
-            
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
-            linkElement.click();
-        }
-        
-        function importarClientes() {
-            document.getElementById('importFile').click();
-        }
-        
-        function handleFileImport(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const novosClientes = JSON.parse(e.target.result);
-                    
-                    if (!Array.isArray(novosClientes)) {
-                        throw new Error('O arquivo não contém uma lista válida de clientes');
-                    }
-                    
-                    if (confirm(`Deseja importar ${novosClientes.length} clientes? Isso substituirá seus clientes atuais.`)) {
-                        clientes = novosClientes;
-                        atualizarTabela();
-                        atualizarContador();
-                        fazerBackup();
-                        alert('Clientes importados com sucesso!');
-                    }
-                } catch (e) {
-                    alert('Erro ao importar clientes: ' + e.message);
-                }
-                
-                // Limpa o input para permitir a importação do mesmo arquivo novamente
-                event.target.value = '';
-            };
-            reader.readAsText(file);
-        }
-        
-        // Funções de histórico
-        function mostrarHistorico() {
-            const modal = document.getElementById('historicoModal');
-            const select = document.getElementById('backupSelect');
-            
-            // Limpa opções existentes
-            select.innerHTML = '<option value="">Selecione um backup para restaurar</option>';
-            
-            // Coleta todos os backups
-            const backups = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith(BACKUP_PREFIX)) {
-                    const timestamp = parseInt(key.replace(BACKUP_PREFIX, ''));
-                    backups.push({ key, timestamp });
-                }
-            }
-            
-            // Ordena do mais novo para o mais antigo
-            backups.sort((a, b) => b.timestamp - a.timestamp);
-            
-            // Adiciona opções
-            backups.forEach(backup => {
-                const option = document.createElement('option');
-                option.value = backup.key;
-                option.textContent = new Date(backup.timestamp).toLocaleString();
-                select.appendChild(option);
-            });
-            
-            modal.style.display = 'block';
-        }
-        
-        function restaurarBackup() {
-            const select = document.getElementById('backupSelect');
-            const backupKey = select.value;
-            
-            if (!backupKey) {
-                alert('Selecione um backup para restaurar');
-                return;
-            }
-            
-            if (confirm('Deseja restaurar este backup? Isso substituirá seus clientes atuais.')) {
-                try {
-                    const backupData = localStorage.getItem(backupKey);
-                    clientes = JSON.parse(backupData);
-                    localStorage.setItem('clientes_atual', backupData);
-                    
-                    atualizarTabela();
-                    atualizarContador();
-                    document.getElementById('ultimoBackup').textContent = new Date(parseInt(backupKey.replace(BACKUP_PREFIX, ''))).toLocaleString();
-                    alert('Backup restaurado com sucesso!');
-                    fecharModal();
-                } catch (e) {
-                    alert('Erro ao restaurar backup: ' + e.message);
-                }
-            }
-        }
-        
-        function excluirBackup() {
-            const select = document.getElementById('backupSelect');
-            const backupKey = select.value;
-            
-            if (!backupKey) {
-                alert('Selecione um backup para excluir');
-                return;
-            }
-            
-            if (confirm('Tem certeza que deseja excluir este backup permanentemente?')) {
-                localStorage.removeItem(backupKey);
-                select.remove(select.selectedIndex);
-                alert('Backup excluído com sucesso!');
-            }
-        }
-        
-        // Funções auxiliares
-        function formatarTelefone(telefone) {
-            // Formatação simples de telefone (11) 99999-9999
-            const nums = telefone.replace(/\D/g, '');
-            if (nums.length === 11) {
-                return `(${nums.substring(0,2)}) ${nums.substring(2,7)}-${nums.substring(7)}`;
-            }
-            if (nums.length === 10) {
-                return `(${nums.substring(0,2)}) ${nums.substring(2,6)}-${nums.substring(6)}`;
-            }
-            return telefone;
-        }
-        
-        function formatarCPF(cpf) {
-            // Formatação de CPF 999.999.999-99
-            const nums = cpf.replace(/\D/g, '');
-            if (nums.length === 11) {
-                return `${nums.substring(0,3)}.${nums.substring(3,6)}.${nums.substring(6,9)}-${nums.substring(9)}`;
-            }
-            return cpf;
-        }
-        
-        function formatarData(data) {
-            // Formata data para dd/mm/aaaa
-            if (!data) return '';
-            try {
-                return new Date(data).toLocaleDateString('pt-BR');
-            } catch (e) {
-                return data;
-            }
-        }
-        
-        function fecharModal() {
-            document.getElementById('observacoesModal').style.display = 'none';
-            document.getElementById('historicoModal').style.display = 'none';
-            clienteEditando = null;
-        }
-        
-        // Fecha o modal ao clicar fora dele
-        window.onclick = function(event) {
-            if (event.target.className === 'modal') {
-                fecharModal();
-            }
-        };
     </script>
 </body>
 </html>
